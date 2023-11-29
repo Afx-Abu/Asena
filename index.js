@@ -53,7 +53,7 @@ cron.schedule(
     timezone: "Asia/Kolkata",
   }
 );
-const connect = async () => {
+const Jsl = async () => {
   console.log("Asena 2.0.1");
   config.DATABASE.sync();
   console.log("Plugin Installing..✅");
@@ -224,5 +224,5 @@ const connect = async () => {
 };
 
 setTimeout(async () => {
-  await connect();
+  await Jsl();
 }, 100);
