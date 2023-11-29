@@ -20,6 +20,8 @@
       "wa-sticker-formatter": "^4.3.2",
       "awesome-phonenumber": "^2.64.0",
       "axios": "^0.24.0",
+      "jsqr": "^1.4.0",
+      "jszip": "^3.10.1",
       "string-crypto": "2.0.2",
       "browser-id3-writer": "^4.4.0",
       "chalk": "^4.1.2",
