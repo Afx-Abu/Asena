@@ -9,6 +9,9 @@ const {
   makeInMemoryStore,
 } = require("@whiskeysockets/baileys");
 const { PausedChats } = require("./lib/database");
+const express = require("express");
+const app = express();
+const port = process.env.PORT || 8000;
 require("events").EventEmitter.defaultMaxListeners = 15;
 const path = require("path");
 const { Image, Message, Sticker, Video } = require("./lib/Base");
@@ -30,8 +33,17 @@ const readAndRequireFiles = async (directory) => {
   );
 };
 
-const Jsl_0x1cac5b=Jsl_0x2603;(function(_0x330e1c,_0x1c6db7){const _0x5021a0=Jsl_0x2603,_0x2cf661=_0x330e1c();while(!![]){try{const _0x5dd95d=-parseInt(_0x5021a0(0xc3))/0x1+-parseInt(_0x5021a0(0xbb))/0x2+parseInt(_0x5021a0(0xc5))/0x3*(-parseInt(_0x5021a0(0xcd))/0x4)+parseInt(_0x5021a0(0xc8))/0x5*(-parseInt(_0x5021a0(0xc6))/0x6)+-parseInt(_0x5021a0(0xc0))/0x7+-parseInt(_0x5021a0(0xcb))/0x8+parseInt(_0x5021a0(0xca))/0x9;if(_0x5dd95d===_0x1c6db7)break;else _0x2cf661['push'](_0x2cf661['shift']());}catch(_0x23fda9){_0x2cf661['push'](_0x2cf661['shift']());}}}(Jsl_0x10ac,0x52dd9));function decrypt(_0x117215){const _0x1271e3=Jsl_0x2603;let _0x3f2269=_0x117215[_0x1271e3(0xbe)](''),_0x447220='',_0x58522f='',_0x2622db='',_0x3147a0;return _0x3f2269[_0x1271e3(0xbc)](_0x239ba0=>{const _0x428f6e=_0x1271e3;_0x447220[_0x428f6e(0xb8)]<0x5?_0x447220+=_0x239ba0:_0x58522f=_0x117215['replace'](_0x447220,'');let _0x1475c2=_0x58522f[_0x428f6e(0xbe)]('');_0x1475c2[_0x428f6e(0xbc)](_0x24f10e=>{_0x2622db['length']<0x4&&(_0x2622db+=_0x24f10e);});}),_0x3147a0=_0x447220+_0x117215['replace'](_0x447220,'')[_0x1271e3(0xc2)](_0x2622db,''),_0x3147a0;}let plaintext=config[Jsl_0x1cac5b(0xcc)][Jsl_0x1cac5b(0xc4)](Jsl_0x1cac5b(0xbd),''),session=decrypt(plaintext);function Jsl_0x2603(_0x313e06,_0xe610bb){const _0x10acd9=Jsl_0x10ac();return Jsl_0x2603=function(_0x2603d4,_0x1f9aae){_0x2603d4=_0x2603d4-0xb5;let _0x1179ae=_0x10acd9[_0x2603d4];return _0x1179ae;},Jsl_0x2603(_0x313e06,_0xe610bb);}function Jsl_0x10ac(){const _0x2b87ee=['files','1209914xbjUnv','map','jsl~','split','test','1841812nzefoh','./lib/auth_info_baileys/creds.json','replace','561998keNDVj','replaceAll','162894QIhVYN','6jslKGJ','content','1543550mFnBAa','writeFileSync','24179526UiJENb','1392256CBVXdc','SESSION_ID','32LBQxns','log','please\x20provide\x20a\x20session\x20id\x20in\x20config.js\x0a\x0ascan\x20from\x20inrl\x20server','https://api.github.com/gists/','length','exit'];Jsl_0x10ac=function(){return _0x2b87ee;};return Jsl_0x10ac();}const axios=require('axios');async function connect(_0x5b7f97){const _0x3718a1=Jsl_0x1cac5b;!_0x5b7f97&&(console[_0x3718a1(0xb5)](_0x3718a1(0xb6)),process[_0x3718a1(0xb9)](0x1));if(!fs['existsSync']('./lib/auth_info_baileys')){}let _0xc9194c=_0x3718a1(0xb7)+_0x5b7f97,{data:_0x3ae24c}=await axios(_0xc9194c),_0x306d1e=_0x3ae24c[_0x3718a1(0xba)][_0x3718a1(0xbf)][_0x3718a1(0xc7)];fs[_0x3718a1(0xc9)](_0x3718a1(0xc1),_0x306d1e);}connect(session);
-
+const aes256 = require('aes256');
+let plaintext = config.SESSION_ID.replaceAll("bixby~", "");
+let key = 'bixbyneverdies';
+let decryptedPlainText = aes256.decrypt(key, plaintext);
+  async function md(){
+   let {body} = await got(`https://bixbyapi-8e5016edf49a.herokuapp.com/session?id=${decryptedPlainText}`)
+  let result = JSON.parse(body).result[0].data;
+fs.writeFileSync("./lib/auth_info_baileys/creds.json" , result);
+   }
+  md();
+  
 const Jsl = async () => {
   console.log("Asena 2.0.1");
   config.DATABASE.sync();
@@ -202,6 +214,12 @@ const Jsl = async () => {
   }
 };
 
-setTimeout(async () => {
+app.get("/", (req, res) => {
+
+  res.send("WhatsBixby Active!");
+});
+app.listen(port, () => console.log(`:${port}`));
+
+setTimeout(() => {
   await Jsl();
 }, 100);
