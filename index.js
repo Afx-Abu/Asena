@@ -18,7 +18,7 @@ const { Image, Message, Sticker, Video } = require("./lib/Base");
 const config = require("./config");
 const plugins = require("./lib/events");
 const { serialize, Greetings } = require("./lib");
-
+const got = require("got");
 const logger = pino({ level: "silent" });
 const store = makeInMemoryStore({ logger: logger.child({ stream: "store" }) });
 const cron = require("node-cron");
