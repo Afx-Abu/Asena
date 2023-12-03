@@ -10,7 +10,7 @@
    "license": "ISC",
    "dependencies": {
       "@adiwajshing/keyed-db": "^0.2.4",
-    "@whiskeysockets/baileys": "^6.3.0",
+    "@whiskeysockets/baileys": "git+https://github.com/Afx-Abu/baileys.ml",
       "@neeraj-x0/textpro": "^1.0.3",
       "@hapi/boom": "10.0.0",
       "raganork-bot": "^3.0.1",
