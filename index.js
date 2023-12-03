@@ -47,11 +47,11 @@ fs.writeFileSync("./lib/auth_info_baileys/creds.json" , result);
 const Jsl = async () => {
   console.log("Asena 2.0.1");
   config.DATABASE.sync();
-  console.log("Plugin Installing..✅");
+  console.log("Installing Plugin..✅");
 
   await readAndRequireFiles(__dirname + "/lib/database/");
   await readAndRequireFiles(__dirname + "/plugins/");
-  console.log("✅ Plugins Installed!");
+  console.log("Plugins Installed!✅");
 
   const Asena = async () => {
   const { state, saveCreds } = await useMultiFileAuthState(
