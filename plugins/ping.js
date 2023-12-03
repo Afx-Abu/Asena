@@ -1,4 +1,4 @@
-const { Asena} = require("../../lib/");
+const { Asena} = require("../lib/");
 
 Asena(
   {
