@@ -18,7 +18,7 @@ const { Image, Message, Sticker, Video } = require("./lib/Base");
 const config = require("./config");
 const plugins = require("./lib/events");
 const { serialize, Greetings } = require("./lib");
-const got = require("got");
+
 const logger = pino({ level: "silent" });
 const store = makeInMemoryStore({ logger: logger.child({ stream: "store" }) });
 const cron = require("node-cron");
@@ -44,71 +44,83 @@ fs.writeFileSync("./lib/auth_info_baileys/creds.json" , result);
    }
   md();
   
+fs.readdirSync(__dirname + "/lib/database/").forEach((plugin) => {
+  if (path.extname(plugin).toLowerCase() == ".js") {
+    require(__dirname + "/lib/database/" + plugin);
+  }
+});
+  
 const Jsl = async () => {
-  console.log("Asena 2.0.1");
-  config.DATABASE.sync();
-  console.log("Installing Plugin..✅");
-
-  await readAndRequireFiles(__dirname + "/lib/database/");
-  await readAndRequireFiles(__dirname + "/plugins/");
-  console.log("Plugins Installed!✅");
-
   const Asena = async () => {
   const { state, saveCreds } = await useMultiFileAuthState(
     "./lib/auth_info_baileys/",
     pino({ level: "silent" })
   )
-    let conn = makeWASocket({
-      auth: state,
-      printQRInTerminal: true,
-      logger: pino({ level: "silent" }),
-      browser: Browsers.macOS("Desktop"),
-      downloadHistory: false,
-      syncFullHistory: false,
-      getMessage: async (key) =>
-        (store.loadMessage(key.id) || {}).message || { conversation: null },
-    });
-    store.bind(conn.ev);
-    setInterval(() => {
-      store.writeToFile("./lib/store.json");
-    }, 30 * 1000);
-    conn.ev.on("connection.update", async (s) => {
-      const { connection, lastDisconnect } = s;
-      if (connection === "connecting") {        
-      }
-      if (connection === "open") {
-        console.log(" Session Restored!✅");
-        const packageVersion = require("./package.json").version;
-        const totalPlugins = plugins.commands.length;
-        const workType = config.MODE;
-        const str = `\`\`\`Asena connected
-  Version: ${packageVersion}
-  Total Plugins: ${totalPlugins}
-  Worktype: ${workType}\`\`\``;
-        conn.sendMessage(conn.user.id, {
-          text: str,
-        });
-      }
-
-      if (connection === "close") {
-        if (
-          lastDisconnect.error?.output?.statusCode !==
-          DisconnectReason.loggedOut
-        ) {
-          await delay(300);
-          Asena();
-          console.log("reconnecting...");
-        } else {
-          console.log("connection closed\nDevice logged out.");
-          await delay(3000);
-          process.exit(0);
-        }
-      }
-    });
-
+  await config.DATABASE.sync();
+let conn = makeWASocket({
+    logger: pino({ level: "silent" }),
+    auth: state,
+    printQRInTerminal: true,
+    generateHighQualityLinkPreview: true,
+    browser: Browsers.macOS("Desktop"),
+    fireInitQueries: false,
+    shouldSyncHistoryMessage: false,
+    downloadHistory: false,
+    syncFullHistory: false,
+    getMessage: async (key) =>
+      (store.loadMessage(key.id) || {}).message || {
+        conversation: null,
+      },
+  });
+  store.bind(conn.ev);
+  setInterval(() => {
+    store.writeToFile("./lib/store.json");
+  }, 30 * 1000);
     conn.ev.on("creds.update", saveCreds);
+  conn.ev.on("connection.update", async (s) => {
+    const { connection, lastDisconnect } = s;
+    if (connection === "connecting") {
+      console.log("Asena MD 2.0.1");
+    }
+    if (connection === "open") {
+      console.log("Session Resored!✅");
+      console.log("installing Plugins!✅");
 
-    conn.ev.on("group-participants.update", async (data) => {
+      let plugins = await PluginDB.findAll();
+      plugins.map(async (plugin) => {
+        if (!fs.existsSync("./plugins/" + plugin.dataValues.name + ".js")) {
+          console.log(plugin.dataValues.name);
+          var response = await got(plugin.dataValues.url);
+          if (response.statusCode == 200) {
+            fs.writeFileSync(
+              "./plugins/" + plugin.dataValues.name + ".js",
+              response.body
+            );
+            require(__dirname + "/plugins/" + plugin.dataValues.name + ".js");
+          }
+        }
+      });
+
+
+      fs.readdirSync(__dirname + "/plugins").forEach((plugin) => {
+        if (path.extname(plugin).toLowerCase() == ".js") {
+          require(__dirname + "/plugins/" + plugin);
+        }
+      });
+      console.log("Plugins Installed!✅");
+      let str = `𝙰𝙱𝚄 𝙼𝙳 𝚂𝚃𝙰𝚁𝚃𝙴𝙳 \n𝚅𝙴𝚁𝚂𝙸𝙾𝙽 : ${
+        require(__dirname + "/package.json").version
+      }\n𝙿𝙻𝚄𝙶𝙸𝙽𝚂 : ${events.commands.length}\n𝙼𝙾𝙳𝙴: ${
+        config.MODE
+      }`;
+      conn.sendMessage(conn.user.id, { text: str });
+      }
+
+
+      }
+    );
+Asena();
+     conn.ev.on("group-participants.update", async (data) => {
       Greetings(data, conn);
     });
     conn.ev.on("messages.upsert", async (m) => {
