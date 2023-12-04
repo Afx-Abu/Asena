@@ -1,4 +1,4 @@
-const fs = require("fs").promises;
+const fs = require("fs");
 const pino = require("pino");
 const {
   default: makeWASocket,
