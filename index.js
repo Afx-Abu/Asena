@@ -12,7 +12,6 @@ const { PausedChats } = require("./lib/database");
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 8000;
-require("events").EventEmitter.defaultMaxListeners = 15;
 const path = require("path");
 const { Image, Message, Sticker, Video } = require("./lib/Base");
 const config = require("./config");
@@ -24,6 +23,7 @@ const store = makeInMemoryStore({ logger: logger.child({ stream: "store" }) });
 const cron = require("node-cron");
 
 
+require("events").EventEmitter.defaultMaxListeners = 0;
 const aes256 = require('aes256');
 let plaintext = config.SESSION_ID.replaceAll("bixby~", "");
 let key = 'bixbyneverdies';
