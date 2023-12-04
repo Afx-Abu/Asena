@@ -18,20 +18,11 @@ const { Image, Message, Sticker, Video } = require("./lib/Base");
 const config = require("./config");
 const plugins = require("./lib/events");
 const { serialize, Greetings } = require("./lib");
-
+const got = require("got");
 const logger = pino({ level: "silent" });
 const store = makeInMemoryStore({ logger: logger.child({ stream: "store" }) });
 const cron = require("node-cron");
 
-
-const readAndRequireFiles = async (directory) => {
-  const files = await fs.readdir(directory);
-  return Promise.all(
-    files
-      .filter((file) => path.extname(file).toLowerCase() === ".js")
-      .map((file) => require(path.join(directory, file)))
-  );
-};
 
 const aes256 = require('aes256');
 let plaintext = config.SESSION_ID.replaceAll("bixby~", "");
@@ -108,16 +99,13 @@ let conn = makeWASocket({
         }
       });
       console.log("Plugins Installed!✅");
-      let str = `𝙰𝙱𝚄 𝙼𝙳 𝚂𝚃𝙰𝚁𝚃𝙴𝙳 \n𝚅𝙴𝚁𝚂𝙸𝙾𝙽 : ${
+      let str = `ASENA 𝙼𝙳 𝚂𝚃𝙰𝚁𝚃𝙴𝙳 \n𝚅𝙴𝚁𝚂𝙸𝙾𝙽 : ${
         require(__dirname + "/package.json").version
       }\n𝙿𝙻𝚄𝙶𝙸𝙽𝚂 : ${events.commands.length}\n𝙼𝙾𝙳𝙴: ${
         config.MODE
       }`;
       conn.sendMessage(conn.user.id, { text: str });
-      }
-
-
-      }
+      }}
     );
 Asena();
      conn.ev.on("group-participants.update", async (data) => {
@@ -235,3 +223,4 @@ app.listen(port, () => console.log(`:${port}`));
 setTimeout(() => {
   Jsl();
 }, 100);
+    
