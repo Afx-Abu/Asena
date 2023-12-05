@@ -1,10 +1,10 @@
 {
    "name": "Asena",
    "version": "2.0.1",
-   "description": "Abu-MD - Simple whatsapp Bot",
-   "main": "./index.js",
-   "scripts": {
-    "start": "supervisor -s index.js"
+   "description": "Asena-MD - Simple whatsapp Bot",
+     "main": "index.js",
+  "scripts": {
+    "start": "pm2 start . --attach --name asena-md"
    },
    "author": "Afx-Abu",
    "license": "ISC",
