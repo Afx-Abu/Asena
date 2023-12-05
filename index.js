@@ -8,7 +8,7 @@ const {
   DisconnectReason,
   makeInMemoryStore,
 } = require("@whiskeysockets/baileys");
-const { PausedChats } = require("./lib/database");
+const { PausedChats, PluginDB } = require("./lib/database");
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 8000;
@@ -21,7 +21,6 @@ const got = require("got");
 const logger = pino({ level: "silent" });
 const store = makeInMemoryStore({ logger: logger.child({ stream: "store" }) });
 const cron = require("node-cron");
-
 
 require("events").EventEmitter.defaultMaxListeners = 0;
 const aes256 = require('aes256');
