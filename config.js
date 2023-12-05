@@ -8,6 +8,7 @@ if (fs.existsSync("config.env")) {
 const toBool = (x) => x === "true";
 
 const DATABASE_URL = process.env.DATABASE_URL || "./lib/database.db";
+process.env.NODE_OPTIONS = '--max_old_space_size=2560'
 
 module.exports = {
   ANTILINK: toBool(process.env.ANTI_LINK) || false,
