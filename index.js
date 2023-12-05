@@ -57,8 +57,8 @@ let conn = makeWASocket({
   setInterval(() => {
     store.writeToFile("./lib/store.json");
   }, 30 * 1000);
-    conn.ev.on("creds.update", saveCreds);
-  conn.ev.on("connection.update", async (s) => {
+    
+ conn.ev.on("connection.update", async (s) => {
     const { connection, lastDisconnect } = s;
     if (connection === "connecting") {
       console.log("Asena MD 2.0.1");
@@ -88,14 +88,11 @@ let conn = makeWASocket({
         }
       });
       console.log("Plugins Installed!✅");
-      let str = `ᴀsᴇɴᴀ sᴛᴀʀᴛᴇᴅ \nᴠᴇʀsɪᴏɴ : ${
-        require(__dirname + "/package.json").version
-      }\nᴘʟᴜɢɪɴs : ${events.commands.length}\nᴍᴏᴅᴇ: ${
-        config.MODE
-      }`;
-      conn.sendMessage(conn.user.id, { text: str });
+      
+      conn.sendMessage(conn.user.id, { text: 'Bot running her' });
       }}
     );
+    conn.ev.on("creds.update", saveCreds);
 Asena();
      conn.ev.on("group-participants.update", async (data) => {
       Greetings(data, conn);
