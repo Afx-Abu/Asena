@@ -16,7 +16,7 @@ const path = require("path");
 const { Image, Message, Sticker, Video } = require("./lib/Base");
 const config = require("./config");
 const plugins = require("./lib/events");
-const { serialize, Greetings } = require("./lib/");
+const { serialize, Greetings } = require("./lib");
 const got = require("got");
 const logger = pino({ level: "silent" });
 const store = makeInMemoryStore({ logger: logger.child({ stream: "store" }) });
@@ -60,10 +60,10 @@ let conn = makeWASocket({
     
  conn.ev.on("connection.update", async (s) => {
     const { connection, lastDisconnect } = s;
-    if (connection === "connecting") {
-      console.log("Asena MD 2.0.1");
+    if (connection === "connecting") {     
     }
     if (connection === "open") {
+    console.log("Asena MD 2.0.1");
       console.log("Session Resored!✅");
       console.log("installing Plugins!✅");
 
@@ -86,10 +86,8 @@ let conn = makeWASocket({
         if (path.extname(plugin).toLowerCase() == ".js") {
           require(__dirname + "/plugins/" + plugin);
         }
-      });
-      console.log("Plugins Installed!✅");
-      
-      conn.sendMessage(conn.user.id, { text: 'Bot running her' });
+      });      
+      conn.sendMessage(conn.user.id, { text: 'Bot running her'});
       }}
     );
     conn.ev.on("creds.update", saveCreds);
